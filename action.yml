@@ -11,10 +11,10 @@ runs:
     id: check-tag
     uses: mukunku/tag-exists-action@v1.2.0
     with:
-      tag: ${{github.event.inputs.tag}}
+      tag: ${{inputs.tag}}
   - name: evaluate tag existence
     uses: actions/github-script@v3
     if: (steps.check-tag.outputs.exists != 'true')
     with:
       script: |
-        core.setFailed('The specified tag does not exist: ${{github.event.inputs.tag}}')
+        core.setFailed('The specified tag does not exist: ${{inputs.tag}}')
