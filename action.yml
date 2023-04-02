@@ -1,0 +1,20 @@
+name: check-tag-existence
+description: Check if a git tag exists and fail workflow if tag doesn't exist.
+inputs:
+  tag:  
+    description: The tag to check for existence
+    required: true
+runs:
+  using: "composite"
+  steps:
+  - name: check tag
+    id: check-tag
+    uses: mukunku/tag-exists-action@v1.2.0
+    with:
+      tag: ${{github.event.inputs.tag}}
+  - name: evaluate tag existence
+    uses: actions/github-script@v3
+    if: (steps.check-tag.outputs.exists != 'true')
+    with:
+      script: |
+        core.setFailed('The specified tag does not exist: ${{github.event.inputs.tag}}')
